@@ -38,27 +38,30 @@ function init_action_buttons(container) {
         var action_button = $("<button>")
                 .attr('type', 'button')
                 .attr('title', SAVE_AS_DEFAULT_BUTTON_MSG)
-                .attr('data-placement', 'right')
                 .addClass('btn-link btn-sm')
                 .addClass('save-as-default')
                 .html($('<i>').addClass('icon-lock'));
         $(this).after(action_button);
     });
-    $('button[title]').tooltip();
+    $('button[title]').tooltip({
+        placement: 'top'
+    });
 }
 
 function load_issue_form() {
-    var spinner = new Spinner().spin();
-
     $.ajax({
         'url': "?form=1",
         beforeSend: function( xhr ) {
-            $(".form-fields").html(spinner.el);
-            $(".spinner").css('left', '50%');
+            $('.form-fields').html(
+                '<div class="loading">' +
+                  '<div class="loading-indicator"></div>' +
+                  '<div class="loading-message">Boop beep boop</div>' +
+                '</div>'
+            );
         }
     }).done(function(data){
         var container = $(".form-fields");
-        var form = $("#create-issue .form-fields", data);
+        var form = $("#youtrack_issue_form .form-fields", data);
         container.html(form);
         container.find("select").addClass('span3').select2();
         init_action_buttons(container);
@@ -66,7 +69,7 @@ function load_issue_form() {
 }
 
 $(function(){
-    var container = $("#create-issue");
+    var container = $("#youtrack_issue_form");
 
     container.delegate(".save-as-default", "click", function(){
         var field = $(this).parents('.controls').find('.project-field[data-field]');

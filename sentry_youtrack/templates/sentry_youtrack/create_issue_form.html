@@ -19,7 +19,7 @@
     </div>
     {% endif %}
 
-    <form id='create-issue' class="form-stacked" action="" method="post">
+    <form id="youtrack_issue_form" class="form-stacked" action="" method="post">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}" />
         <div class="form-fields">
@@ -38,7 +38,6 @@
     {{ block.super }}
 
     <link rel="stylesheet" href="{% static 'sentry_youtrack/styles.css' %}">
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
     <script type="text/javascript" src="{% static 'sentry_youtrack/scripts.js' %}"></script>
     <script type="text/javascript">
         var SAVE_AS_DEFAULT_BUTTON_MSG = "{% trans 'Save as default' %}";
@@ -47,9 +46,7 @@
     {% block yt_issue_js %}
         {% if not request.POST %}
             <script>
-                $(function(){
-                    load_issue_form();
-                });
+                $(load_issue_form);
             </script>
         {% endif %}
     {% endblock %}
