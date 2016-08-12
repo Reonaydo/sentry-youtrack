@@ -173,7 +173,6 @@ class YouTrackConfigurationForm(forms.Form):
         super(YouTrackConfigurationForm, self).__init__(*args, **kwargs)
 
         self.client_errors = {}
-        self._errors = {}
         client = None
         initial = kwargs.get("initial")
 
