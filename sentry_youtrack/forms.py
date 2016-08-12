@@ -173,7 +173,6 @@ class YouTrackConfigurationForm(forms.Form):
         super(YouTrackConfigurationForm, self).__init__(*args, **kwargs)
 
         self.client_errors = {}
-        self._errors = {}
         client = None
         initial = kwargs.get("initial")
 
@@ -210,6 +209,8 @@ class YouTrackConfigurationForm(forms.Form):
             del self.fields['default_tags']
             del self.fields['ignore_fields']
 
+        if self._errors is None:
+            self.full_clean()
         for field, error in self.client_errors.iteritems():
             self._errors[field] = [error]
 
