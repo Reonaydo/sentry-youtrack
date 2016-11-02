@@ -3,9 +3,9 @@ from hashlib import md5
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.utils.encoding import force_bytes
 from django.utils.translation import ugettext_lazy as _
 from requests.exceptions import ConnectionError, HTTPError, SSLError
-from unidecode import unidecode
 
 from .youtrack import YouTrackClient
 
@@ -56,7 +56,7 @@ class YouTrackProjectForm(forms.Form):
 
     def _get_initial(self, field_name):
         default_fields = self.initial.get('default_fields') or {}
-        field_key = md5(unidecode(field_name)).hexdigest()
+        field_key = md5(force_bytes(field_name, errors='replace')).hexdigest()
         return default_fields.get(field_key)
 
     def _get_form_field(self, project_field):
@@ -122,7 +122,7 @@ class DefaultFieldForm(forms.Form):
         data = self.cleaned_data
         default_fields = self.plugin.get_option(
             self.plugin.default_fields_key, self.project) or {}
-        default_fields[md5(unidecode(data['field'])).hexdigest()] = data['value']
+        default_fields[md5(force_bytes(data['field'], errors='replace')).hexdigest()] = data['value']
         self.plugin.set_option(
             self.plugin.default_fields_key, default_fields, self.project)
 
