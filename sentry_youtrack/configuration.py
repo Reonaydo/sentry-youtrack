@@ -28,8 +28,7 @@ class YouTrackConfiguration(object):
                 choices = []
                 if yt_project:
                     choices = self.get_ignore_field_choices(client, yt_project)
-                self.config.append(
-                {
+                self.config.append({
                     'name':'ignore_fields',
                     'label':'Ignore Fields',
                     'type':'select',
