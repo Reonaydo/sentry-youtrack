@@ -67,8 +67,7 @@ class YouTrackConfiguration(object):
                 'help': 'Only enter a password if you want to change it.',}
        
         return [url, username, password]
-    def __add_project_related_fields(self, client, yt_project):
-        pass
+    
     def __add_default_tags(self):
         self.config.append({'name':'default_tags',
             'label':'Default Tags',
