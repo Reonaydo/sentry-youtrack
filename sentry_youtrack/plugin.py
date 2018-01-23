@@ -7,13 +7,14 @@ from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from sentry.models import GroupMeta
 from sentry.plugins.bases.issue import IssuePlugin
+from sentry.exceptions import PluginError
 
 from . import VERSION
 from .forms import (NewIssueForm, AssignIssueForm, DefaultFieldForm,
-                    YouTrackConfigurationForm, YouTrackProjectForm,
-                    VERIFY_SSL_CERTIFICATE)
+                    YouTrackProjectForm, VERIFY_SSL_CERTIFICATE)
 from .utils import cache_this, get_int
 from .youtrack import YouTrackClient
+from requests.exceptions import ConnectionError, HTTPError, SSLError
 
 
 class YouTrackPlugin(IssuePlugin):
@@ -28,7 +29,6 @@ class YouTrackPlugin(IssuePlugin):
     assign_issue_form = AssignIssueForm
     create_issue_template = "sentry_youtrack/create_issue_form.html"
     assign_issue_template = "sentry_youtrack/assign_issue_form.html"
-    project_conf_form = YouTrackConfigurationForm
     project_conf_template = "sentry_youtrack/project_conf_form.html"
     project_fields_form = YouTrackProjectForm
     default_fields_key = 'default_fields'
@@ -163,3 +163,176 @@ class YouTrackPlugin(IssuePlugin):
         if form.is_valid():
             form.save()
         return HttpResponse()
+
+    def has_project_conf(self):
+        return True
+
+    def get_config(self, project, user, **kwargs):
+        config = []
+       
+        initial = {
+            'project': self.get_option('project', project),
+            'url': self.get_option('url', project),
+            'username': self.get_option('username', project),
+            'password': self.get_option('password', project),
+        }
+        # filtering out null values
+        initial = dict((k, v) for k, v in initial.iteritems() if v)
+
+        self.config_form = YouTrackConfiguration(initial)
+        return self.config_form.config
+
+    def validate_config(self, project, config, actor):
+        super(YouTrackPlugin, self).validate_config(project, config, actor)
+        errors = self.config_form.client_errors
+        for error, message in errors.iteritems():
+            # raise PluginError(message)
+            pass
+        return config
+
+class YouTrackConfiguration(object):
+
+    error_message = {
+        'client': _("Unable to connect to YouTrack."),
+        'project_unknown': _('Unable to fetch project'),
+        'project_not_found': _('Project not found: %s'),
+        'invalid_ssl': _("SSL certificate  verification failed."),
+        'invalid_password': _('Invalid username or password.'),
+        'invalid_project': _('Invalid project: \'%s\''),
+        'missing_fields': _('Missing required fields.'),
+        'perms': _("User doesn't have Low-level Administration permissions."),
+        'required': _("This field is required.")}
+
+    def __init__(self, initial):
+        self.config = self.build_default_fields()
+        self.set_initial(initial)
+
+    def set_initial(self, initial):
+        self.client_errors = {}
+        if self.has_client_fields(initial):
+            client = self.get_youtrack_client(initial)
+            if client:
+                if initial.get('project'):
+                    choices = self.get_ignore_field_choices(
+                        client, initial.get('project'))
+                    self.config.append({
+                        'name':'ignore_fields',
+                        'label':'Ignore Fields',
+                        'type':'select',
+                        'choices':choices,
+                        'required':False,
+                        'help': 'These fields will not appear on the form.',})
+
+                choices = self.get_project_field_choices(client, initial.get('project'))
+                self.config.append({
+                    'name':'project',
+                    'label':'Linked Project',
+                    'type':'select',
+                    'choices': choices,
+                    'required':True,})
+                
+                self.config.append({'name':'default_tags',
+                'label':'Default Tags',
+                'type':'text',
+                'required':False,
+                'placeholder': 'e.g. sentry',
+                'help': 'Comma-separated list of tags.',})
+
+                if not initial.get('project'):
+                    self.second_step_msg = _(
+                        "Your credentials are valid but plugin is NOT active "
+                        "yet. Please fill in remaining required fields.")
+
+    def has_client_fields(self, initial):
+        return initial.get('password') and initial.get('username') and initial.get('url')
+                
+    def build_default_fields(self):
+        url = {'name':'url',
+                'label':'YouTrack Instance URL',
+                'type':'text',
+                'required':True,
+                'placeholder': 'e.g. "https://yoursitename.myjetbrains.com/youtrack/"',}
+        username = {'name':'username',
+                'label':'Username',
+                'type':'text',
+                'required':True,
+                'help': 'User should have admin rights.',}
+        password = {'name':'password',
+                'label':'Password',
+                'type':'secret',
+                'required':False,
+                'help': 'Only enter a password if you want to change it.',}
+       
+        return [url, username, password]
+        
+
+    def get_youtrack_client(self, data, additional_params=None):
+        yt_settings = {
+            'url': data.get('url'),
+            'username': data.get('username'),
+            'password': data.get('password'),
+            'verify_ssl_certificate': VERIFY_SSL_CERTIFICATE}
+        if additional_params:
+            yt_settings.update(additional_params)
+
+        client = None
+        try:
+            client = YouTrackClient(**yt_settings)
+        except (HTTPError, ConnectionError) as e:
+            if e.response is not None and e.response.status_code == 403:
+                self.client_errors['username'] = self.error_message[
+                    'invalid_password']
+            else:
+                self.client_errors['url'] = self.error_message['client']
+        except (SSLError, TypeError) as e:
+            self.client_errors['url'] = self.error_message['invalid_ssl']
+        if client:
+            try:
+                client.get_user(yt_settings.get('username'))
+            except HTTPError as e:
+                if e.response.status_code == 403:
+                    self.client_errors['username'] = self.error_message['perms']
+                    client = None
+        return client
+
+    def get_ignore_field_choices(self, client, project):
+        try:
+            fields = list(client.get_project_fields_list(project))
+        except HTTPError:
+            self.client_errors['project'] = self.error_message[
+                'invalid_project'] % (project,)
+        else:
+            names = [field['name'] for field in fields]
+            return zip(names, names)
+        return []
+
+    def get_project_field_choices(self, client, project):
+        choices = [(' ', u"- Choose project -")]
+        try:
+            projects = list(client.get_projects())
+        except HTTPError:
+            self.client_errors['project'] = self.error_message[
+                'invalid_project'] % (project, )
+        else:
+            for project in projects:
+                display = "%s (%s)" % (project['name'], project['id'])
+                choices.append((project['id'], display))
+        return choices
+    
+    def get_project_fields_list(self, client, project_id):
+        try:
+            return list(client.get_project_fields_list(project_id))
+        except (HTTPError, ConnectionError) as e:
+            if e.response is not None and e.response.status_code == 404:
+                self.client_errors['project'] = self.error_message['project_not_found'] % project_id
+            else:
+                self.client_errors['project'] = self.error_message['project_unknown']
+
+    def get_projects(self, client):
+        try:
+            return list(client.get_projects())
+        except (HTTPError, ConnectionError) as e:
+            if e.response is not None and e.response.status_code == 404:
+                self.client_errors['project'] = self.error_message['project_not_found'] % project_id
+            else:
+                self.client_errors['project'] = self.error_message['project_unknown']
