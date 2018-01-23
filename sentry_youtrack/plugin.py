@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from sentry.models import GroupMeta
 from sentry.plugins.bases.issue import IssuePlugin
-
+from sentry.exceptions import PluginError
 
 from . import VERSION
 from .forms import (NewIssueForm, AssignIssueForm, DefaultFieldForm,
@@ -185,7 +185,12 @@ class YouTrackPlugin(IssuePlugin):
     def validate_config(self, project, config, actor):
         super(YouTrackPlugin, self).validate_config(project, config, actor)
         errors = self.config_form.client_errors
+        for key, message in errors.iteritems():
+            if key in  ['url', 'username', 'pasword']:
+                self.reset_options(project=project)
+                raise PluginError(message)
+
         for error, message in errors.iteritems():
-            # raise PluginError(message)
-            pass
+            raise PluginError(message)
+        
         return config
