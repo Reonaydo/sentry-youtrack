@@ -33,7 +33,7 @@ setup(
     version=VERSION,
     author='Adam Bogdał',
     author_email='adam@bogdal.pl',
-    url='http://github.com/bogdal/sentry-youtrack',
+    url='https://github.com/getsentry/sentry-youtrack/',
     description='A Sentry extension which integrates with YouTrack',
     long_description=open('README.rst').read(),
     license='BSD',

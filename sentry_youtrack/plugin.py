@@ -19,7 +19,7 @@ from requests.exceptions import ConnectionError, HTTPError, SSLError
 
 class YouTrackPlugin(IssuePlugin):
     author = u"Adam Bogdał"
-    author_url = "https://github.com/bogdal/sentry-youtrack"
+    author_url = "https://github.com/getsentry/sentry-youtrack/"
     version = VERSION
     slug = "youtrack"
     title = _("YouTrack")
@@ -34,8 +34,8 @@ class YouTrackPlugin(IssuePlugin):
     default_fields_key = 'default_fields'
 
     resource_links = [
-        (_("Bug Tracker"), "https://github.com/bogdal/sentry-youtrack/issues"),
-        (_("Source"), "http://github.com/bogdal/sentry-youtrack")]
+        (_("Bug Tracker"), "https://github.com/getsentry/sentry-youtrack/issues/"),
+        (_("Source"), "https://github.com/getsentry/sentry-youtrack/")]
 
     def is_configured(self, request, project, **kwargs):
         return bool(self.get_option('project', project))
