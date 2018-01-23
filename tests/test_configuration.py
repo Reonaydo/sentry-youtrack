@@ -3,8 +3,6 @@ from unittest import  TestCase
 from vcr import VCR
 import os
 
-PROJECT_ID = 'myproject'
-
 vcr = VCR(path_transformer=VCR.ensure_suffix('.yaml'),
           cassette_library_dir=os.path.join('tests', 'cassettes'))
 print(os.path.join('tests', 'cassettes'))
