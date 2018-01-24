@@ -7,18 +7,19 @@ from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from sentry.models import GroupMeta
 from sentry.plugins.bases.issue import IssuePlugin
+from sentry.exceptions import PluginError
 
 from . import VERSION
 from .forms import (NewIssueForm, AssignIssueForm, DefaultFieldForm,
-                    YouTrackConfigurationForm, YouTrackProjectForm,
-                    VERIFY_SSL_CERTIFICATE)
+                    YouTrackProjectForm, VERIFY_SSL_CERTIFICATE)
 from .utils import cache_this, get_int
 from .youtrack import YouTrackClient
+from sentry_youtrack.configuration import YouTrackConfiguration
 
 
 class YouTrackPlugin(IssuePlugin):
     author = u"Adam Bogdał"
-    author_url = "https://github.com/bogdal/sentry-youtrack"
+    author_url = "https://github.com/getsentry/sentry-youtrack/"
     version = VERSION
     slug = "youtrack"
     title = _("YouTrack")
@@ -28,14 +29,13 @@ class YouTrackPlugin(IssuePlugin):
     assign_issue_form = AssignIssueForm
     create_issue_template = "sentry_youtrack/create_issue_form.html"
     assign_issue_template = "sentry_youtrack/assign_issue_form.html"
-    project_conf_form = YouTrackConfigurationForm
     project_conf_template = "sentry_youtrack/project_conf_form.html"
     project_fields_form = YouTrackProjectForm
     default_fields_key = 'default_fields'
 
     resource_links = [
-        (_("Bug Tracker"), "https://github.com/bogdal/sentry-youtrack/issues"),
-        (_("Source"), "http://github.com/bogdal/sentry-youtrack")]
+        (_("Bug Tracker"), "https://github.com/getsentry/sentry-youtrack/issues/"),
+        (_("Source"), "https://github.com/getsentry/sentry-youtrack/")]
 
     def is_configured(self, request, project, **kwargs):
         return bool(self.get_option('project', project))
@@ -163,3 +163,34 @@ class YouTrackPlugin(IssuePlugin):
         if form.is_valid():
             form.save()
         return HttpResponse()
+
+    def has_project_conf(self):
+        return True
+
+    def get_config(self, project, user, **kwargs):
+        config = []
+       
+        initial = {
+            'project': self.get_option('project', project),
+            'url': self.get_option('url', project),
+            'username': self.get_option('username', project),
+            'password': self.get_option('password', project),
+        }
+        # filtering out null values
+        initial = dict((k, v) for k, v in initial.iteritems() if v)
+
+        self.config_form = YouTrackConfiguration(initial)
+        return self.config_form.config
+
+    def validate_config(self, project, config, actor):
+        super(YouTrackPlugin, self).validate_config(project, config, actor)
+        errors = self.config_form.client_errors
+        for key, message in errors.iteritems():
+            if key in  ['url', 'username', 'pasword']:
+                self.reset_options(project=project)
+                raise PluginError(message)
+
+        for error, message in errors.iteritems():
+            raise PluginError(message)
+        
+        return config
