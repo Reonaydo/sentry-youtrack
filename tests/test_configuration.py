@@ -49,6 +49,3 @@ class TestYouTrackConfiguration(TestCase):
 
         project_field = self.get_field(yt_config, 'project')
         assert project_field and project_field['choices'] == choices
-
-    def test_can_fix_errors(self):
-        pass

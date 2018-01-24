@@ -19,7 +19,7 @@ class YouTrackConfiguration(object):
         'required': _("This field is required.")}
 
     def __init__(self, initial):
-        self.config = self.build_default_fields()
+        self.config = self.build_default_fields(initial)
         self.client_errors = {}
         if self.has_client_fields(initial):
             client = self.get_youtrack_client(initial)
@@ -49,7 +49,7 @@ class YouTrackConfiguration(object):
     def has_client_fields(self, initial):
         return initial.get('password') and initial.get('username') and initial.get('url')
                 
-    def build_default_fields(self):
+    def build_default_fields(self, initial):
         url = {'name':'url',
                 'label':'YouTrack Instance URL',
                 'type':'text',
@@ -65,6 +65,8 @@ class YouTrackConfiguration(object):
                 'type':'secret',
                 'required':False,
                 'help': 'Only enter a password if you want to change it.',}
+        if initial.get('password'):
+            password['has_saved_value'] = True
        
         return [url, username, password]
     
