@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from requests.exceptions import ConnectionError, HTTPError, SSLError
 from sentry.exceptions import PluginError
 from django.utils.translation import ugettext_lazy as _

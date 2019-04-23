@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import requests
 import logging
 from bs4 import BeautifulSoup
@@ -162,7 +163,7 @@ class YouTrackClient(object):
 
     def get_priorities(self):
         try:
-            return self._get_custom_field_values('bundle', 'Priorities')
+            return self._get_custom_field_values('bundle', 'Priorities2')
         except:
             return self._get_custom_field_values('bundle', u'Приоритеты')
 
