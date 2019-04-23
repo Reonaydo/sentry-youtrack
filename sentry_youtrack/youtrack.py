@@ -163,7 +163,7 @@ class YouTrackClient(object):
 
     def get_priorities(self):
         try:
-            return self._get_custom_field_values('bundle', 'Priorities2')
+            return self._get_custom_field_values('bundle', 'Priorities')
         except:
             return self._get_custom_field_values('bundle', u'Приоритеты')
 
