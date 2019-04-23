@@ -140,7 +140,7 @@ class YouTrackConfiguration(object):
             else:
                 self.client_errors['project'] = self.error_message['project_unknown']
 
-    def get_projects(self, client):
+    def get_projects(self, client, project_id):
         try:
             return list(client.get_projects())
         except (HTTPError, ConnectionError) as e:

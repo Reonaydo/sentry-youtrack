@@ -7,8 +7,8 @@ interactions:
     method: GET
     uri: https://youtrack.myjetbrains.com/rest/project/all
   response:
-    body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projects><project
-        name="My project" shortName="myproject"/><project name="Test project" shortName="testproject"/></projects>'}
+    body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectShorts><project
+        name="My project" shortName="myproject"/><project name="Test project" shortName="testproject"/></projectShorts>'}
     headers:
       access-control-expose-headers: [Location]
       cache-control: ['no-cache, no-store, no-transform, must-revalidate']

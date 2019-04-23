@@ -156,14 +156,22 @@ class YouTrackClient(object):
     def get_projects(self):
         url = self.url + self.PROJECTS_URL
         response = self.request(url, method='get')
-        for project in BeautifulSoup(response.text, 'xml').projects:
+        data = BeautifulSoup(response.text, 'xml')
+        for project in data.projectShorts:
             yield {'id': project['shortName'], 'name': project['name']}
 
     def get_priorities(self):
-        return self._get_custom_field_values('bundle', 'Priorities')
+        try:
+            return self._get_custom_field_values('bundle', 'Priorities')
+        except:
+            return self._get_custom_field_values('bundle', u'Приоритеты')
 
     def get_issue_types(self):
-        return self._get_custom_field_values('bundle', 'Types')
+        try:
+            return self._get_custom_field_values('bundle', 'Types')
+        except:
+            return self._get_custom_field_values('bundle', u'Типы')
+
 
     def get_project_issues(self, project_id, query=None, offset=0, limit=15):
         url = self.url + self.ISSUES_URL.replace('<project_id>', project_id)
