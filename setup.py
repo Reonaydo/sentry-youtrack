@@ -39,6 +39,7 @@ setup(
     license='BSD',
     packages=find_packages(),
     install_requires=[
+        'soupsieve==1.9.6',
         'beautifulsoup4',
     ],
     include_package_data=True,
