@@ -72,12 +72,12 @@ class YouTrackPlugin(IssuePlugin):
         return _("Assign existing YouTrack issue")
 
     def get_new_issue_form(self, request, group, event, **kwargs):
-        if request.POST or request.GET.get('form'):
-            return self.new_issue_form(
-                project_fields=self.get_project_fields(group.project),
-                data=request.POST or None,
-                initial=self.get_initial_form_data(request, group, event))
-        return forms.Form()
+        #if request.POST or request.GET.get('form'):
+        return self.new_issue_form(
+            project_fields=self.get_project_fields(group.project),
+            data=request.POST or None,
+            initial=self.get_initial_form_data(request, group, event))
+        #return forms.Form()
 
     def create_issue(self, request, group, form_data, **kwargs):
         project_fields = self.get_project_fields(group.project)
