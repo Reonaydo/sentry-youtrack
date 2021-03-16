@@ -6,6 +6,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from sentry.models import GroupMeta
+from sentry_plugins.base import CorePluginMixin
 from sentry.plugins.bases.issue import IssuePlugin
 from sentry.exceptions import PluginError
 from sentry.integrations import FeatureDescription, IntegrationFeatures
@@ -18,7 +19,7 @@ from .youtrack import YouTrackClient
 from sentry_youtrack.configuration import YouTrackConfiguration
 
 
-class YouTrackPlugin(IssuePlugin):
+class YouTrackPlugin(CorePluginMixin, IssuePlugin):
     author = u"Adam Bogdał"
     author_url = "https://github.com/getsentry/sentry-youtrack/"
     version = VERSION
@@ -26,6 +27,7 @@ class YouTrackPlugin(IssuePlugin):
     title = _("YouTrack")
     conf_title = title
     conf_key = slug
+    description = "Integration with Youtrack"
     new_issue_form = NewIssueForm
     assign_issue_form = AssignIssueForm
     create_issue_template = "sentry_youtrack/create_issue_form.html"
