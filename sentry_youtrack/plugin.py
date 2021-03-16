@@ -32,6 +32,15 @@ class YouTrackPlugin(IssuePlugin):
     project_conf_template = "sentry_youtrack/project_conf_form.html"
     project_fields_form = YouTrackProjectForm
     default_fields_key = 'default_fields'
+    
+    feature_descriptions = [
+        FeatureDescription(
+            """
+            Create and link Sentry issue groups directly to an Youtrack issue.
+            """,
+            IntegrationFeatures.ISSUE_BASIC,
+        ),
+    ]
 
     resource_links = [
         (_("Bug Tracker"), "https://github.com/getsentry/sentry-youtrack/issues/"),
