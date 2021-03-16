@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from sentry.models import GroupMeta
 from sentry.plugins.bases.issue import IssuePlugin
 from sentry.exceptions import PluginError
+from sentry.integrations import FeatureDescription, IntegrationFeatures
 
 from . import VERSION
 from .forms import (NewIssueForm, AssignIssueForm, DefaultFieldForm,
