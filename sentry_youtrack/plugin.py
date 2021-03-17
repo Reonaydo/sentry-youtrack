@@ -20,7 +20,7 @@ from sentry_youtrack.configuration import YouTrackConfiguration
 
 
 class YouTrackPlugin(CorePluginMixin, IssuePlugin):
-    author = u"Adam Bogdał"
+    author = "Adam Bogdał"
     author_url = "https://github.com/getsentry/sentry-youtrack/"
     version = VERSION
     slug = "youtrack"
@@ -96,8 +96,7 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
         project_form = self.project_fields_form(project_fields, request.POST)
         project_field_values = project_form.get_project_field_values()
 
-        tags = filter(None, map(lambda x: x.strip(),
-                                form_data['tags'].split(',')))
+        tags = [_f for _f in [x.strip() for x in form_data['tags'].split(',')] if _f]
         yt_client = self.get_youtrack_client(group.project)
 
         issue_data = {
@@ -106,7 +105,7 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
             'description': form_data.get('description')}
         issue_id = yt_client.create_issue(issue_data)
 
-        for field, value in project_field_values.iteritems():
+        for field, value in project_field_values.items():
             if value:
                 value = [value] if type(value) != list else value
                 cmd = map(lambda x: "%s %s" % (field, x), value)
@@ -189,7 +188,7 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
             'password': self.get_option('password', project),
         }
         # filtering out null values
-        initial = dict((k, v) for k, v in initial.iteritems() if v)
+        initial = dict((k, v) for k, v in initial.items() if v)
 
         self.config_form = YouTrackConfiguration(initial)
         return self.config_form.config
@@ -197,12 +196,12 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
     def validate_config(self, project, config, actor):
         super(YouTrackPlugin, self).validate_config(project, config, actor)
         errors = self.config_form.client_errors
-        for key, message in errors.iteritems():
+        for key, message in errors.items():
             if key in  ['url', 'username', 'pasword']:
                 self.reset_options(project=project)
                 raise PluginError(message)
 
-        for error, message in errors.iteritems():
+        for error, message in errors.items():
             raise PluginError(message)
         
         return config
