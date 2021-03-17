@@ -165,13 +165,13 @@ class YouTrackClient(object):
         try:
             return self._get_custom_field_values('bundle', 'Priorities')
         except:
-            return self._get_custom_field_values('bundle', u'Приоритеты')
+            return self._get_custom_field_values('bundle', 'Приоритеты')
 
     def get_issue_types(self):
         try:
             return self._get_custom_field_values('bundle', 'Types')
         except:
-            return self._get_custom_field_values('bundle', u'Типы')
+            return self._get_custom_field_values('bundle', 'Типы')
 
 
     def get_project_issues(self, project_id, query=None, offset=0, limit=15):
@@ -197,7 +197,7 @@ class YouTrackClient(object):
 
     def add_tags(self, issue, tags):
         for tag in tags:
-            cmd = u'add tag %s' % tag
+            cmd = 'add tag %s' % tag
             self.execute_command(issue, cmd)
 
     def get_project_fields_list(self, project_id):

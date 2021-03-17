@@ -50,7 +50,7 @@ class YouTrackProjectForm(forms.Form):
     def get_project_field_values(self):
         self.full_clean()
         values = {}
-        for form_field_name, name in self.project_field_names.iteritems():
+        for form_field_name, name in self.project_field_names.items():
             values[name] = self.cleaned_data.get(form_field_name)
         return values
 

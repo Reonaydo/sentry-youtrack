@@ -116,11 +116,11 @@ class YouTrackConfiguration(object):
                 'invalid_project'] % (project,)
         else:
             names = [field['name'] for field in fields]
-            return zip(names, names)
+            return list(zip(names, names))
         return []
 
     def get_project_field_choices(self, client, project):
-        choices = [(' ', u"- Choose project -")]
+        choices = [(' ', "- Choose project -")]
         try:
             projects = list(client.get_projects())
         except HTTPError:

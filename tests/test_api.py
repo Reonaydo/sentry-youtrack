@@ -40,56 +40,56 @@ def test_get_projects(youtrack_client):
 
 @vcr.use_cassette
 def test_get_priorities(youtrack_client):
-    priorities = [u'Show-stopper', u'Critical', u'Major', u'Normal', u'Minor']
+    priorities = ['Show-stopper', 'Critical', 'Major', 'Normal', 'Minor']
     assert youtrack_client.get_priorities() == priorities
 
 
 @vcr.use_cassette
 def test_get_issue_types(youtrack_client):
-    types = [u'Bug', u'Cosmetics', u'Exception', u'Feature', u'Task', 
-             u'Usability Problem', u'Performance Problem', u'Epic', 
-             u'Meta Issue', u'Auto-reported exception']
+    types = ['Bug', 'Cosmetics', 'Exception', 'Feature', 'Task', 
+             'Usability Problem', 'Performance Problem', 'Epic', 
+             'Meta Issue', 'Auto-reported exception']
     assert youtrack_client.get_issue_types() == types
 
 
 @vcr.use_cassette
 def test_get_project_fields(youtrack_client):
     fields = [
-        {'name': u'Priority',
-         'values': [u'Show-stopper', u'Critical', u'Major', u'Normal', u'Minor'],
-         'empty_text': u'No Priority',
-         'type': u'enum[1]'},
-        {'name': u'Type',
-         'values': [u'Bug', u'Cosmetics', u'Exception', u'Feature', u'Task',
-                    u'Usability Problem', u'Performance Problem', u'Epic',
-                    u'Meta Issue', u'Auto-reported exception'], 
-         'empty_text': u'No Type', 
-         'type': u'enum[1]'}, 
-        {'name': u'State',
-         'values': [u'Submitted', u'Open', u'In Progress', u'To be discussed', 
-                    u'Reopened', u"Can't Reproduce", u'Duplicate', u'Fixed', 
-                    u"Won't fix", u'Incomplete', u'Obsolete',
-                    u'Verified', u'New'],
-         'empty_text': u'No State', 
-         'type': u'state[1]'}, 
-        {'name': u'Assignee',
-         'values': [u'root'], 
-         'empty_text': u'Unassigned', 
-         'type': u'user[1]'}, 
-        {'name': u'Subsystem',
-         'values': [u'No subsystem'], 
-         'empty_text': u'No Subsystem', 
-         'type': u'ownedField[1]'}, 
-        {'name': u'Fix versions',
+        {'name': 'Priority',
+         'values': ['Show-stopper', 'Critical', 'Major', 'Normal', 'Minor'],
+         'empty_text': 'No Priority',
+         'type': 'enum[1]'},
+        {'name': 'Type',
+         'values': ['Bug', 'Cosmetics', 'Exception', 'Feature', 'Task',
+                    'Usability Problem', 'Performance Problem', 'Epic',
+                    'Meta Issue', 'Auto-reported exception'], 
+         'empty_text': 'No Type', 
+         'type': 'enum[1]'}, 
+        {'name': 'State',
+         'values': ['Submitted', 'Open', 'In Progress', 'To be discussed', 
+                    'Reopened', "Can't Reproduce", 'Duplicate', 'Fixed', 
+                    "Won't fix", 'Incomplete', 'Obsolete',
+                    'Verified', 'New'],
+         'empty_text': 'No State', 
+         'type': 'state[1]'}, 
+        {'name': 'Assignee',
+         'values': ['root'], 
+         'empty_text': 'Unassigned', 
+         'type': 'user[1]'}, 
+        {'name': 'Subsystem',
+         'values': ['No subsystem'], 
+         'empty_text': 'No Subsystem', 
+         'type': 'ownedField[1]'}, 
+        {'name': 'Fix versions',
          'values': [], 
-         'empty_text': u'Unscheduled', 
-         'type': u'version[*]'}, 
-        {'name': u'Affected versions',
+         'empty_text': 'Unscheduled', 
+         'type': 'version[*]'}, 
+        {'name': 'Affected versions',
          'values': [], 
-         'empty_text': u'Unknown', 
-         'type': u'version[*]'}, 
-        {'name': u'Fixed in build',
+         'empty_text': 'Unknown', 
+         'type': 'version[*]'}, 
+        {'name': 'Fixed in build',
          'values': [], 
-         'empty_text': u'Next Build', 
-         'type': u'build[1]'}]
+         'empty_text': 'Next Build', 
+         'type': 'build[1]'}]
     assert list(youtrack_client.get_project_fields(PROJECT_ID)) == fields
