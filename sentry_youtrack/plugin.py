@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 import json
 
-from django import forms
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
@@ -35,7 +34,7 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
     project_conf_template = "sentry_youtrack/project_conf_form.html"
     project_fields_form = YouTrackProjectForm
     default_fields_key = 'default_fields'
-    
+
     feature_descriptions = [
         FeatureDescription(
             """
@@ -43,6 +42,13 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
             """,
             IntegrationFeatures.ISSUE_BASIC,
         ),
+        FeatureDescription(
+            """
+            Link Sentry issue groups directly to an existing Youtrack issue.
+            """,
+            IntegrationFeatures.ISSUE_BASIC,
+        ),
+
     ]
 
     resource_links = [
@@ -84,12 +90,10 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
         return _("Assign existing YouTrack issue")
 
     def get_new_issue_form(self, request, group, event, **kwargs):
-        #if request.POST or request.GET.get('form'):
         return self.new_issue_form(
             project_fields=self.get_project_fields(group.project),
             data=request.POST or None,
             initial=self.get_initial_form_data(request, group, event))
-        #return forms.Form()
 
     def create_issue(self, request, group, form_data, **kwargs):
         project_fields = self.get_project_fields(group.project)
@@ -116,6 +120,8 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
 
     def get_issue_url(self, group, issue_id, **kwargs):
         url = self.get_option('url', group.project).rstrip('/')
+        self.logger('Youtrack url: %s', url)
+        self.logger('Youtrack issueid: %s', issue_id)
         return "%s/issue/%s" % (url, issue_id)
 
     def get_view_response(self, request, group):
@@ -134,6 +140,7 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
         return action_list
 
     def view(self, request, group, **kwargs):
+        logger.info('Youtrack view kwargs%s', kwargs)
         def get_action_view():
             action_view = "%s_view" % request.GET.get('action')
             if request.GET.get('action') and hasattr(self, action_view):
@@ -179,8 +186,6 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
         return True
 
     def get_config(self, project, user, **kwargs):
-        config = []
-       
         initial = {
             'project': self.get_option('project', project),
             'url': self.get_option('url', project),
@@ -197,11 +202,11 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
         super(YouTrackPlugin, self).validate_config(project, config, actor)
         errors = self.config_form.client_errors
         for key, message in errors.items():
-            if key in  ['url', 'username', 'pasword']:
+            if key in ['url', 'username', 'pasword']:
                 self.reset_options(project=project)
                 raise PluginError(message)
 
         for error, message in errors.items():
             raise PluginError(message)
-        
+
         return config

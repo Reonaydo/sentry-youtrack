@@ -7,7 +7,7 @@ def cache_this(timeout=60):
     def decorator(func):
         def wrapper(*args, **kwargs):
             def get_cache_key(*args, **kwargs):
-                params = list(args) + kwargs.values()
+                params = list(args) + list(kwargs.values())
                 return md5("".join(map(str, params))).hexdigest()
             key = get_cache_key(func.__name__, *args, **kwargs)
             result = cache.get(key)
