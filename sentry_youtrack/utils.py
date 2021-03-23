@@ -8,7 +8,8 @@ def cache_this(timeout=60):
         def wrapper(*args, **kwargs):
             def get_cache_key(*args, **kwargs):
                 params = list(args) + list(kwargs.values())
-                return md5("".join(map(str, params))).hexdigest()
+                encodestr = "".join(map(str, params))
+                return md5(encodestr.encode()).hexdigest()
             key = get_cache_key(func.__name__, *args, **kwargs)
             result = cache.get(key)
             if not result:

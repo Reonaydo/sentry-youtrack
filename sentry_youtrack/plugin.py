@@ -120,9 +120,8 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
 
     def get_issue_url(self, group, issue_id, **kwargs):
         url = self.get_option('url', group.project).rstrip('/')
-        self.logger.info('Youtrack url: %s', url)
-        self.logger.info('Youtrack issueid: %s', issue_id)
-        return "%s/issue/%s" % (url, issue_id)
+        link = "%s/issue/%s" % (url, issue_id)
+        return link
 
     def get_view_response(self, request, group):
         if request.is_ajax() and request.GET.get('action'):
@@ -140,7 +139,6 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
         return action_list
 
     def view(self, request, group, **kwargs):
-        self.logger.info('Youtrack view kwargs: %s', kwargs)
 
         def get_action_view():
             action_view = "%s_view" % request.GET.get('action')
