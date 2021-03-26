@@ -70,7 +70,7 @@ class YouTrackProjectForm(forms.Form):
         if form_field:
             return form_field(**kwargs)
         if field_values:
-            choices = zip(field_values, field_values)
+            choices = list(zip(field_values, field_values))
             if "[*]" in field_type:
                 if kwargs['initial']:
                     kwargs['initial'] = kwargs['initial'].split(',')
