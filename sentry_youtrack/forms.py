@@ -96,7 +96,7 @@ class NewIssueForm(YouTrackProjectForm):
 
     def clean_description(self):
         description = self.cleaned_data.get('description')
-        description = description.replace('```', '{quote}')
+        # description = description.replace('```', '{quote}')
         return description
 
 
