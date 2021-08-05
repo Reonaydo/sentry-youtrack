@@ -44,7 +44,7 @@ class YouTrackPlugin(IssuePlugin):
         settings = {
             'url': self.get_option('url', project),
             'username': self.get_option('username', project),
-            'password': self.get_option('password', project),
+            'api_key': self.get_option('api_key', project),
             'verify_ssl_certificate': VERIFY_SSL_CERTIFICATE}
         return YouTrackClient(**settings)
 
@@ -169,12 +169,12 @@ class YouTrackPlugin(IssuePlugin):
 
     def get_config(self, project, user, **kwargs):
         config = []
-       
+
         initial = {
             'project': self.get_option('project', project),
             'url': self.get_option('url', project),
             'username': self.get_option('username', project),
-            'password': self.get_option('password', project),
+            'api_key': self.get_option('api_key', project),
         }
         # filtering out null values
         initial = dict((k, v) for k, v in initial.iteritems() if v)
@@ -192,5 +192,5 @@ class YouTrackPlugin(IssuePlugin):
 
         for error, message in errors.iteritems():
             raise PluginError(message)
-        
+
         return config
