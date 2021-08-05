@@ -25,7 +25,7 @@ class YouTrackClient(object):
     LOGIN_URL = '/api/user/login'
     PROJECT_URL = '/api/admin/project/<project_id>'
     PROJECT_FIELDS = '/api/admin/project/<project_id>/customfield'
-    PROJECTS_URL = '/api/project/all'
+    PROJECTS_URL = '/api/admin/projects'
     CREATE_URL = '/api/issue'
     ISSUES_URL = '/api/issue/byproject/<project_id>'
     COMMAND_URL = '/api/issue/<issue>/execute'
