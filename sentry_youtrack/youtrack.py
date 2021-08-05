@@ -32,27 +32,11 @@ class YouTrackClient(object):
     CUSTOM_FIELD_VALUES = '/api/admin/customfield/<param_name>/<param_value>'
     USER_URL = '/api/admin/user/<user>'
 
-    API_KEY_COOKIE_NAME = 'jetbrains.charisma.main.security.PRINCIPAL'
-
     def __init__(self, url, username=None, password=None, api_key=None,
                  verify_ssl_certificate=True):
         self.verify_ssl_certificate = verify_ssl_certificate
         self.url = url.rstrip('/') if url else ''
-        if api_key is None:
-            self.api_key = self._login(username, password)
-        else:
-            self.api_key = api_key
-        self.cookies = {self.API_KEY_COOKIE_NAME: self.api_key}
-
-    def _login(self, username, password):
-        credentials = {
-            'login': username,
-            'password': password}
-        url = self.url + self.LOGIN_URL
-        response = self.request(url, data=credentials, method='post')
-        if BeautifulSoup(response.text, 'xml').login is None:
-            raise requests.HTTPError('Invalid YouTrack url')
-        return response.cookies.get(self.API_KEY_COOKIE_NAME)
+        self.api_key = api_key
 
     def _get_bundle(self, response, bundle='enumeration'):
         soup = BeautifulSoup(response.text, 'xml')
@@ -131,10 +115,10 @@ class YouTrackClient(object):
             'params': params,
             'verify': self.verify_ssl_certificate,
             'headers': {
-                'User-Agent': 'sentry-youtrack/%s' % VERSION}}
-
-        if hasattr(self, 'cookies'):
-            kwargs['cookies'] = self.cookies
+                'User-Agent': 'sentry-youtrack/%s' % VERSION,
+                'Authorization': 'Bearer {}'.format(self.api_key),
+            }
+        }
 
         session = Session()
         if method == 'get':
