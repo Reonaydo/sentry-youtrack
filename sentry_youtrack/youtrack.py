@@ -22,15 +22,15 @@ class YouTrackError(Exception):
 
 class YouTrackClient(object):
 
-    LOGIN_URL = '/rest/user/login'
-    PROJECT_URL = '/rest/admin/project/<project_id>'
-    PROJECT_FIELDS = '/rest/admin/project/<project_id>/customfield'
-    PROJECTS_URL = '/rest/project/all'
-    CREATE_URL = '/rest/issue'
-    ISSUES_URL = '/rest/issue/byproject/<project_id>'
-    COMMAND_URL = '/rest/issue/<issue>/execute'
-    CUSTOM_FIELD_VALUES = '/rest/admin/customfield/<param_name>/<param_value>'
-    USER_URL = '/rest/admin/user/<user>'
+    LOGIN_URL = '/api/user/login'
+    PROJECT_URL = '/api/admin/project/<project_id>'
+    PROJECT_FIELDS = '/api/admin/project/<project_id>/customfield'
+    PROJECTS_URL = '/api/project/all'
+    CREATE_URL = '/api/issue'
+    ISSUES_URL = '/api/issue/byproject/<project_id>'
+    COMMAND_URL = '/api/issue/<issue>/execute'
+    CUSTOM_FIELD_VALUES = '/api/admin/customfield/<param_name>/<param_value>'
+    USER_URL = '/api/admin/user/<user>'
 
     API_KEY_COOKIE_NAME = 'jetbrains.charisma.main.security.PRINCIPAL'
 
@@ -88,7 +88,7 @@ class YouTrackClient(object):
 
     def _get_custom_project_field_details(self, field):
         url = field['url']
-        url = '%s%s' % (self.url, url[url.index('/rest/admin/'):])
+        url = '%s%s' % (self.url, url[url.index('/api/admin/'):])
         response = self.request(url, method='get')
         field_data = BeautifulSoup(response.text, 'xml')
         field_type = field_data.projectCustomField['type']
