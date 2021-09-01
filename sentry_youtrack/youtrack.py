@@ -82,7 +82,7 @@ class YouTrackClient(object):
     def _get_custom_field_values(self, name, value, bundle='enumeration'):
         url = self.url + (self.CUSTOM_FIELD_VALUES
                           .replace("<param_name>", name)
-                          .replace('<param_value>', value))
+                          .replace('<param_value>', requests.compat.quote(value)))
         response = self.request(url, method='get')
         return self._get_bundle(response, bundle)
 
