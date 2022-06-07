@@ -13,7 +13,7 @@ class YouTrackConfiguration(object):
         'project_unknown': _('Unable to fetch project'),
         'project_not_found': _('Project not found: %s'),
         'invalid_ssl': _("SSL certificate  verification failed."),
-        'invalid_password': _('Invalid username or password.'),
+        'invalid_api_key': _('Invalid username or api_key.'),
         'invalid_project': _('Invalid project: \'%s\''),
         'missing_fields': _('Missing required fields.'),
         'perms': _("User doesn't have Low-level Administration permissions."),
@@ -48,8 +48,8 @@ class YouTrackConfiguration(object):
                 self.__add_default_tags()
 
     def has_client_fields(self, initial):
-        return initial.get('password') and initial.get('username') and initial.get('url')
-                
+        return initial.get('api_key') and initial.get('username') and initial.get('url')
+
     def build_default_fields(self, initial):
         url = {'name':'url',
                 'label':'YouTrack Instance URL',
@@ -61,16 +61,16 @@ class YouTrackConfiguration(object):
                 'type':'text',
                 'required':True,
                 'help': 'User should have admin rights.',}
-        password = {'name':'password',
-                'label':'Password',
+        api_key = {'name':'api_key',
+                'label':'API key',
                 'type':'secret',
                 'required':False,
-                'help': 'Only enter a password if you want to change it.',}
-        if initial.get('password'):
-            password['has_saved_value'] = True
-       
-        return [url, username, password]
-    
+                'help': 'Only enter a api_key if you want to change it.',}
+        if initial.get('api_key'):
+            api_key['has_saved_value'] = True
+
+        return [url, username, api_key]
+
     def __add_default_tags(self):
         self.config.append({'name':'default_tags',
             'label':'Default Tags',
@@ -83,7 +83,7 @@ class YouTrackConfiguration(object):
         yt_settings = {
             'url': data.get('url'),
             'username': data.get('username'),
-            'password': data.get('password'),
+            'api_key': data.get('api_key'),
             'verify_ssl_certificate': VERIFY_SSL_CERTIFICATE}
         if additional_params:
             yt_settings.update(additional_params)
@@ -94,7 +94,7 @@ class YouTrackConfiguration(object):
         except (HTTPError, ConnectionError) as e:
             if e.response is not None and e.response.status_code == 403:
                 self.client_errors['username'] = self.error_message[
-                    'invalid_password']
+                    'invalid_api_key']
             else:
                 self.client_errors['url'] = self.error_message['client']
         except (SSLError, TypeError) as e:
@@ -131,7 +131,7 @@ class YouTrackConfiguration(object):
                 display = "%s (%s)" % (project['name'], project['id'])
                 choices.append((project['id'], display))
         return choices
-    
+
     def get_project_fields_list(self, client, project_id):
         try:
             return list(client.get_project_fields_list(project_id))

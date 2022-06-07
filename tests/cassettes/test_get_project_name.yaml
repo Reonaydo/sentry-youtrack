@@ -5,7 +5,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/project/myproject
+    uri: https://youtrack.myjetbrains.com/api/admin/project/myproject
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><project
         name="My project" id="myproject" archived="false" lead="root"/>'}
