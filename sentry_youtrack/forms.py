@@ -70,7 +70,7 @@ class YouTrackProjectForm(forms.Form):
         if form_field:
             return form_field(**kwargs)
         if field_values:
-            choices = zip(field_values, field_values)
+            choices = list(zip(field_values, field_values))
             if "[*]" in field_type:
                 if kwargs['initial']:
                     kwargs['initial'] = kwargs['initial'].split(',')
@@ -96,7 +96,7 @@ class NewIssueForm(YouTrackProjectForm):
 
     def clean_description(self):
         description = self.cleaned_data.get('description')
-        description = description.replace('```', '{quote}')
+        # description = description.replace('```', '{quote}')
         return description
 
 
