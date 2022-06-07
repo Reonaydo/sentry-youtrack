@@ -5,17 +5,17 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield
+    uri: https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectCustomFieldRefs><projectCustomField
-        name="Priority" url="https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Priority"/><projectCustomField
-        name="Type" url="https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Type"/><projectCustomField
-        name="State" url="https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/State"/><projectCustomField
-        name="Assignee" url="https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Assignee"/><projectCustomField
-        name="Subsystem" url="https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Subsystem"/><projectCustomField
-        name="Fix versions" url="https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Fix%20versions"/><projectCustomField
-        name="Affected versions" url="https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Affected%20versions"/><projectCustomField
-        name="Fixed in build" url="https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Fixed%20in%20build"/></projectCustomFieldRefs>'}
+        name="Priority" url="https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Priority"/><projectCustomField
+        name="Type" url="https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Type"/><projectCustomField
+        name="State" url="https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/State"/><projectCustomField
+        name="Assignee" url="https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Assignee"/><projectCustomField
+        name="Subsystem" url="https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Subsystem"/><projectCustomField
+        name="Fix versions" url="https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Fix%20versions"/><projectCustomField
+        name="Affected versions" url="https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Affected%20versions"/><projectCustomField
+        name="Fixed in build" url="https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Fixed%20in%20build"/></projectCustomFieldRefs>'}
     headers:
       access-control-expose-headers: [Location]
       cache-control: ['no-cache, no-store, no-transform, must-revalidate']
@@ -32,7 +32,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Priority
+    uri: https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Priority
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectCustomField
         name="Priority" type="enum[1]" emptyText="No Priority" canBeEmpty="false"><param
@@ -53,7 +53,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/customfield/bundle/Priorities
+    uri: https://youtrack.myjetbrains.com/api/admin/customfield/bundle/Priorities
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><enumeration
         name="Priorities"><value colorIndex="20">Show-stopper</value><value colorIndex="19">Critical</value><value
@@ -74,7 +74,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Type
+    uri: https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Type
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectCustomField
         name="Type" type="enum[1]" emptyText="No Type" canBeEmpty="false"><param name="bundle"
@@ -95,7 +95,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/customfield/bundle/Types
+    uri: https://youtrack.myjetbrains.com/api/admin/customfield/bundle/Types
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><enumeration
         name="Types"><value>Bug</value><value>Cosmetics</value><value>Exception</value><value>Feature</value><value>Task</value><value>Usability
@@ -117,7 +117,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/State
+    uri: https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/State
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectCustomField
         name="State" type="state[1]" emptyText="No State" canBeEmpty="false"><param
@@ -138,7 +138,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/customfield/stateBundle/States
+    uri: https://youtrack.myjetbrains.com/api/admin/customfield/stateBundle/States
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><stateBundle
         name="States"><state isResolved="false">Submitted</state><state isResolved="false">Open</state><state
@@ -165,7 +165,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Assignee
+    uri: https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Assignee
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectCustomField
         name="Assignee" type="user[1]" emptyText="Unassigned" canBeEmpty="true"><param
@@ -186,11 +186,11 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/customfield/userBundle/My%20project:%20Assignees
+    uri: https://youtrack.myjetbrains.com/api/admin/customfield/userBundle/My%20project:%20Assignees
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><userBundle
         name="My project: Assignees"><user login="root" ringId="01932a63-0d13-45ec-a877-d2355c558b35"
-        url="https://youtrack.myjetbrains.com/rest/admin/user/root"/></userBundle>'}
+        url="https://youtrack.myjetbrains.com/api/admin/user/root"/></userBundle>'}
     headers:
       access-control-expose-headers: [Location]
       cache-control: ['no-cache, no-store, no-transform, must-revalidate']
@@ -207,7 +207,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Subsystem
+    uri: https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Subsystem
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectCustomField
         name="Subsystem" type="ownedField[1]" emptyText="No Subsystem" canBeEmpty="false"><param
@@ -228,7 +228,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/customfield/ownedFieldBundle/My%20project:%20Subsystems
+    uri: https://youtrack.myjetbrains.com/api/admin/customfield/ownedFieldBundle/My%20project:%20Subsystems
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><ownedFieldBundle
         name="My project: Subsystems"><ownedField owner="&lt;no user&gt;">No subsystem</ownedField></ownedFieldBundle>'}
@@ -248,7 +248,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Fix%20versions
+    uri: https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Fix%20versions
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectCustomField
         name="Fix versions" type="version[*]" emptyText="Unscheduled" canBeEmpty="true"><param
@@ -269,7 +269,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/customfield/versionBundle/My%20project:%20Versions
+    uri: https://youtrack.myjetbrains.com/api/admin/customfield/versionBundle/My%20project:%20Versions
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><versions
         name="My project: Versions"/>'}
@@ -289,7 +289,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Affected%20versions
+    uri: https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Affected%20versions
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectCustomField
         name="Affected versions" type="version[*]" emptyText="Unknown" canBeEmpty="true"><param
@@ -310,7 +310,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/customfield/versionBundle/My%20project:%20Versions
+    uri: https://youtrack.myjetbrains.com/api/admin/customfield/versionBundle/My%20project:%20Versions
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><versions
         name="My project: Versions"/>'}
@@ -330,7 +330,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/project/myproject/customfield/Fixed%20in%20build
+    uri: https://youtrack.myjetbrains.com/api/admin/project/myproject/customfield/Fixed%20in%20build
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectCustomField
         name="Fixed in build" type="build[1]" emptyText="Next Build" canBeEmpty="true"><param
@@ -351,7 +351,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/customfield/buildBundle/My%20project:%20Builds
+    uri: https://youtrack.myjetbrains.com/api/admin/customfield/buildBundle/My%20project:%20Builds
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><buildBundle
         name="My project: Builds"/>'}

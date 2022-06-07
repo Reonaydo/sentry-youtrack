@@ -5,7 +5,7 @@ interactions:
       Content-Type: [application/x-www-form-urlencoded]
       User-Agent: [sentry-youtrack/0.2.4]
     method: POST
-    uri: https://youtrack.myjetbrains.com/rest/user/login
+    uri: https://youtrack.myjetbrains.com/api/user/login
   response:
     body: {string: !!python/unicode '<login>ok</login>'}
     headers:

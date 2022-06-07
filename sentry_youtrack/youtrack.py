@@ -22,37 +22,21 @@ class YouTrackError(Exception):
 
 class YouTrackClient(object):
 
-    LOGIN_URL = '/rest/user/login'
-    PROJECT_URL = '/rest/admin/project/<project_id>'
-    PROJECT_FIELDS = '/rest/admin/project/<project_id>/customfield'
-    PROJECTS_URL = '/rest/project/all'
-    CREATE_URL = '/rest/issue'
-    ISSUES_URL = '/rest/issue/byproject/<project_id>'
-    COMMAND_URL = '/rest/issue/<issue>/execute'
-    CUSTOM_FIELD_VALUES = '/rest/admin/customfield/<param_name>/<param_value>'
-    USER_URL = '/rest/admin/user/<user>'
-
-    API_KEY_COOKIE_NAME = 'jetbrains.charisma.main.security.PRINCIPAL'
+    LOGIN_URL = '/api/user/login'
+    PROJECT_URL = '/api/admin/project/<project_id>'
+    PROJECT_FIELDS = '/api/admin/project/<project_id>/customfield'
+    PROJECTS_URL = '/api/admin/projects'
+    CREATE_URL = '/api/issue'
+    ISSUES_URL = '/api/issue/byproject/<project_id>'
+    COMMAND_URL = '/api/issue/<issue>/execute'
+    CUSTOM_FIELD_VALUES = '/api/admin/customfield/<param_name>/<param_value>'
+    USER_URL = '/api/admin/user/<user>'
 
     def __init__(self, url, username=None, password=None, api_key=None,
                  verify_ssl_certificate=True):
         self.verify_ssl_certificate = verify_ssl_certificate
         self.url = url.rstrip('/') if url else ''
-        if api_key is None:
-            self.api_key = self._login(username, password)
-        else:
-            self.api_key = api_key
-        self.cookies = {self.API_KEY_COOKIE_NAME: self.api_key}
-
-    def _login(self, username, password):
-        credentials = {
-            'login': username,
-            'password': password}
-        url = self.url + self.LOGIN_URL
-        response = self.request(url, data=credentials, method='post')
-        if BeautifulSoup(response.text, 'xml').login is None:
-            raise requests.HTTPError('Invalid YouTrack url')
-        return response.cookies.get(self.API_KEY_COOKIE_NAME)
+        self.api_key = api_key
 
     def _get_bundle(self, response, bundle='enumeration'):
         soup = BeautifulSoup(response.text, 'xml')
@@ -88,7 +72,7 @@ class YouTrackClient(object):
 
     def _get_custom_project_field_details(self, field):
         url = field['url']
-        url = '%s%s' % (self.url, url[url.index('/rest/admin/'):])
+        url = '%s%s' % (self.url, url[url.index('/api/admin/'):])
         response = self.request(url, method='get')
         field_data = BeautifulSoup(response.text, 'xml')
         field_type = field_data.projectCustomField['type']
@@ -131,10 +115,10 @@ class YouTrackClient(object):
             'params': params,
             'verify': self.verify_ssl_certificate,
             'headers': {
-                'User-Agent': 'sentry-youtrack/%s' % VERSION}}
-
-        if hasattr(self, 'cookies'):
-            kwargs['cookies'] = self.cookies
+                'User-Agent': 'sentry-youtrack/%s' % VERSION,
+                'Authorization': 'Bearer {}'.format(self.api_key),
+            }
+        }
 
         session = Session()
         if method == 'get':

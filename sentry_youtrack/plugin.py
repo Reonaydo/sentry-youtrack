@@ -62,7 +62,7 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
         settings = {
             'url': self.get_option('url', project),
             'username': self.get_option('username', project),
-            'password': self.get_option('password', project),
+            'api_key': self.get_option('api_key', project),
             'verify_ssl_certificate': VERIFY_SSL_CERTIFICATE}
         return YouTrackClient(**settings)
 
@@ -189,7 +189,7 @@ class YouTrackPlugin(CorePluginMixin, IssuePlugin):
             'project': self.get_option('project', project),
             'url': self.get_option('url', project),
             'username': self.get_option('username', project),
-            'password': self.get_option('password', project),
+            'api_key': self.get_option('api_key', project),
         }
         # filtering out null values
         initial = dict((k, v) for k, v in initial.items() if v)

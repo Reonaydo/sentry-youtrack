@@ -5,7 +5,7 @@ interactions:
       Content-Type: [application/x-www-form-urlencoded]
       User-Agent: [sentry-youtrack/0.2.4]
     method: POST
-    uri: https://youtrack.myjetbrains.com/rest/user/login
+    uri: https://youtrack.myjetbrains.com/api/user/login
   response:
     body: {string: !!python/unicode '<login>ok</login>'}
     headers:
@@ -23,9 +23,9 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/admin/user/root
+    uri: https://youtrack.myjetbrains.com/api/admin/user/root
   response:
-    body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?> <user login="root" fullName="root" groupsUrl="https://youtrack.myjetbrains.com/rest/admin/user/root/group/" rolesUrl="https://youtrack.myjetbrains.com/rest/admin/user/root/role/"/>'}
+    body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?> <user login="root" fullName="root" groupsUrl="https://youtrack.myjetbrains.com/api/admin/user/root/group/" rolesUrl="https://youtrack.myjetbrains.com/api/admin/user/root/role/"/>'}
     headers:
       access-control-expose-headers: [Location]
       cache-control: ['no-cache, no-store, no-transform, must-revalidate']
@@ -42,7 +42,7 @@ interactions:
       Cookie: [jetbrains.charisma.main.security.PRINCIPAL=abcd1234]
       User-Agent: [sentry-youtrack/0.2.4]
     method: GET
-    uri: https://youtrack.myjetbrains.com/rest/project/all
+    uri: https://youtrack.myjetbrains.com/api/project/all
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><projectShorts><project
         name="My project" shortName="myproject"/><project name="Test project" shortName="testproject"/></projectShorts>'}
