@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+import os
+import json
 import requests
 import logging
 from bs4 import BeautifulSoup
@@ -25,7 +27,8 @@ class YouTrackClient(object):
     LOGIN_URL = '/rest/user/login'
     PROJECT_URL = '/rest/admin/project/<project_id>'
     PROJECT_FIELDS = '/rest/admin/project/<project_id>/customfield'
-    PROJECTS_URL = '/rest/project/all'
+    # PROJECTS_URL = '/rest/project/all'
+    PROJECTS_URL = '/api/admin/projects/?fields=name,shortName'  # ! NEW API
     CREATE_URL = '/rest/issue'
     ISSUES_URL = '/rest/issue/byproject/<project_id>'
     COMMAND_URL = '/rest/issue/<issue>/execute'
@@ -131,7 +134,9 @@ class YouTrackClient(object):
             'params': params,
             'verify': self.verify_ssl_certificate,
             'headers': {
-                'User-Agent': 'sentry-youtrack/%s' % VERSION}}
+                'User-Agent': 'sentry-youtrack/%s' % VERSION,
+                'Authorization': 'Bearer %s' % self.api_key}
+                }
 
         if hasattr(self, 'cookies'):
             kwargs['cookies'] = self.cookies
@@ -154,11 +159,20 @@ class YouTrackClient(object):
         response = self.request(url, method='get')
         return BeautifulSoup(response.text, 'xml').user
 
+    # ! OLD API DEPRECATED
+#    def get_projects(self):
+#        url = self.url + self.PROJECTS_URL
+#        response = self.request(url, method='get')
+#        data = BeautifulSoup(response.text, 'xml')
+#        for project in data.projectShorts:
+#            yield {'id': project['shortName'], 'name': project['name']}
+
+    # ! NEW API
     def get_projects(self):
         url = self.url + self.PROJECTS_URL
         response = self.request(url, method='get')
-        data = BeautifulSoup(response.text, 'xml')
-        for project in data.projectShorts:
+        data = json.loads(response.text)
+        for project in data:
             yield {'id': project['shortName'], 'name': project['name']}
 
     def get_priorities(self):
@@ -172,7 +186,6 @@ class YouTrackClient(object):
             return self._get_custom_field_values('bundle', 'Types')
         except:
             return self._get_custom_field_values('bundle', 'Типы')
-
 
     def get_project_issues(self, project_id, query=None, offset=0, limit=15):
         url = self.url + self.ISSUES_URL.replace('<project_id>', project_id)
@@ -211,3 +224,14 @@ class YouTrackClient(object):
         for field in self.get_project_fields_list(project_id):
             if not field['name'] in ignore_fields:
                 yield self._get_custom_project_field_details(field)
+
+
+if __name__ == "__main__":
+    # test new api (projects list)
+    call_api = YouTrackClient(
+        url=os.environ.get('YT_URL', ''),
+        api_key=os.environ.get('YT_TOKEN', '')
+        )
+    project = call_api.get_projects()
+    for item in range(5):
+        print(next(project))
