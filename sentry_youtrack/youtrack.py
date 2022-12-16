@@ -38,24 +38,29 @@ class YouTrackClient(object):
     API_KEY_COOKIE_NAME = 'jetbrains.charisma.main.security.PRINCIPAL'
 
     def __init__(self, url, username=None, password=None, api_key=None,
-                 verify_ssl_certificate=True):
+        verify_ssl_certificate=True):
+
         self.verify_ssl_certificate = verify_ssl_certificate
         self.url = url.rstrip('/') if url else ''
+        # ! OLD USE _login
+        # if api_key is None:
+        #     self.api_key = self._login(username, password)
+        # ! NEW USE environ YT_TOKEN
         if api_key is None:
-            self.api_key = self._login(username, password)
+            self.api_key = os.environ.get('YT_TOKEN', '')
         else:
-            self.api_key = api_key
+            self.api_key = str(api_key)  # test string field
         self.cookies = {self.API_KEY_COOKIE_NAME: self.api_key}
 
-    def _login(self, username, password):
-        credentials = {
-            'login': username,
-            'password': password}
-        url = self.url + self.LOGIN_URL
-        response = self.request(url, data=credentials, method='post')
-        if BeautifulSoup(response.text, 'xml').login is None:
-            raise requests.HTTPError('Invalid YouTrack url')
-        return response.cookies.get(self.API_KEY_COOKIE_NAME)
+    # def _login(self, username, password):
+    #     credentials = {
+    #         'login': username,
+    #         'password': password}
+    #     url = self.url + self.LOGIN_URL
+    #     response = self.request(url, data=credentials, method='post')
+    #     if BeautifulSoup(response.text, 'xml').login is None:
+    #         raise requests.HTTPError('Invalid YouTrack url')
+    #     return response.cookies.get(self.API_KEY_COOKIE_NAME)
 
     def _get_bundle(self, response, bundle='enumeration'):
         soup = BeautifulSoup(response.text, 'xml')
